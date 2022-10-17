@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+    <head>
+        <title>Bank Transfer</title>
+    </head>
+    <body>
+        <h2> Your transactions:</h2>
+        {% for transaction in transactions %}
+        <b>To:</b> {{transaction.target}}<br>
+        <b>Amount:</b> {{transaction.amount}}<br>
+        <b>Message:</b> {{transaction.message|safe}}<br>
+        <b>Date:</b> {{transaction.time}}<br>
+        <br>
+        {% endfor %}
+    </body>

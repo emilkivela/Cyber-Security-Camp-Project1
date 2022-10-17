@@ -8,3 +8,10 @@ class Account(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	balance = models.IntegerField()
 
+class Transaction(models.Model):
+	source = models.ForeignKey(User, on_delete=models.CASCADE, related_name='source')
+	target = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target')
+	message = models.TextField()
+	amount = models.IntegerField()
+	time = models.DateTimeField(auto_now_add=True)
+

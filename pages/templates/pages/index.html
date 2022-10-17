@@ -14,7 +14,8 @@
 		<tr>
 		<th style="text-align:left">Balance:  <td>{{user.account.balance}}
 		</table>
-
+        
+        <a href="http://localhost:8000/transactions">Your transactions </a>
 
         <form action='logout/' method="POST">
 			{% csrf_token %}
@@ -22,7 +23,7 @@
         </form>
 		
         <h2>Transfer money</h2>
-
+        <!--CSRF-vulnerability will be fixed by making the form POST, not GET, and adding {% csrf_token %}-->
         <form action='transfer/' method="GET">
             <span>To:</span><br/>
             <select name="to">
@@ -33,7 +34,8 @@
 
             <span>Amount:</span><br/>
             <input type="number" name="amount"/><br/>
-
+            <span>Message:</span><br/>
+            <textarea name="message" cols="40" rows="5"></textarea><br/>
             <input type="submit" value="Transfer"/>
         </form>
     </body>
