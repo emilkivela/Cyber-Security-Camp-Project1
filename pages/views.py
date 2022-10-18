@@ -24,7 +24,7 @@ def confirmView(request):
 @login_required
 def transferView(request):
 	# CSRF 
-	# To fix the CSRF-vulnerability, we need to change the from from GET to POST
+	# To fix the CSRF-vulnerability, we need to change the form from GET to POST
 	# request.session['to'] = request.GET.get('to') -> request.session['to'] = request.POST.get('to')
 	# we also need to do changes to the HTML in index.html
 	request.session['to'] = request.GET.get('to')
@@ -36,8 +36,10 @@ def transferView(request):
 @login_required
 def homepageView(request):
 	accounts = Account.objects.exclude(user_id=request.user.id)
-	return render(request, 'pages/index.html', {'accounts': accounts}) 
+	transactions = Transaction.objects.filter(source=request.user)
 
+	return render(request, 'pages/index.html', {'accounts': accounts, 'transactions' : transactions}) 
+ 
 @login_required
 def transactionView(request):
 	transactions = Transaction.objects.filter(source=request.user)
@@ -54,4 +56,7 @@ def signinView(request):
 
     return render(request, 'pages/signin.html')
 
-  
+def infoView(request, transaction_id):
+	transaction = Transaction.objects.get(id=transaction_id)
+	return render(request, 'pages/info.html', {'transaction' : transaction})
+

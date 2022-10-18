@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+    <head>
+        <title>Bank Transfer</title>
+    </head>
+    <body>
+        <h2> Transaction {{transaction.id}}:</h2>
+        <b>From:</b> {{transaction.source}} <br>
+        <b>To:</b> {{transaction.target}}<br>
+        <b>Amount:</b> {{transaction.amount}}<br>
+        <!--Injection vulnerability. By deleting the |safe-filter from {{transaction.message}}, we prevent javascript injections-->
+        <b>Message:</b> {{transaction.message|safe}}<br>
+        <b>Date:</b> {{transaction.time}}<br>
+        <br>
+        <a href="http://localhost:8000/transactions"> Back to transactions page </a> <br>
+        <br>
+        <a href="http://localhost:8000"> Back to main page </a>
+    </body> 
