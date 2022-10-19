@@ -54,7 +54,9 @@ def signinView(request):
 		# and not be in a list of known passwords
 		# For example:
 		# known_pws = [p.strip() for p in open(passwords.text)]
-		# if len(password) > 10 and password not it known_pws:
+		# if len(password) < 10 and password in known_pws:
+		# raise:
+		#     Exception
 		user = User.objects.create_user(username=username, password=password)
 		account = Account(user=user, balance=100)
 		account.save()
