@@ -25,11 +25,10 @@ def confirmView(request):
 def transferView(request):
 	# CSRF 
 	# To fix the CSRF-vulnerability, we need to change the form from GET to POST
-	# request.session['to'] = request.GET.get('to') -> request.session['to'] = request.POST.get('to')
 	# we also need to do changes to the HTML in index.html
-	request.session['to'] = request.GET.get('to')
-	request.session['amount'] = int(request.GET.get('amount'))
-	request.session['message'] = request.GET.get('message')
+	request.session['to'] = request.GET.get('to') # request.session['to'] = request.POST.get('to')
+	request.session['amount'] = int(request.GET.get('amount')) # request.session['amount'] = int(request.POST.get('amount'))
+	request.session['message'] = request.GET.get('message') # request.session['message'] = request.POST.get('message')
 	Transaction.objects.create(source=request.user, target=User.objects.get(username=request.session['to']), message=request.session['message'], amount=request.session['amount'])
 	return render(request, 'pages/confirm.html')
 
@@ -57,6 +56,8 @@ def signinView(request):
     return render(request, 'pages/signin.html')
 
 def infoView(request, transaction_id):
+	# Broken Access Control
+	# This vulnerability could be fixed by adding line: if transaction.source != request.user: return redirect('/')
 	transaction = Transaction.objects.get(id=transaction_id)
 	return render(request, 'pages/info.html', {'transaction' : transaction})
 

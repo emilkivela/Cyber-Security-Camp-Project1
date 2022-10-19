@@ -23,7 +23,8 @@
 		
         <h2>Transfer money</h2>
         <!--CSRF-vulnerability will be fixed by making the form POST, not GET, and adding {% csrf_token %}-->
-        <form action='transfer/' method="GET">
+        <form action='transfer/' method="GET"> <!--<form action='transfer/' method="POST">-->
+            <!--{% csrf_token %}-->
             <span>To:</span><br/>
             <select name="to">
 			{% for account in accounts %}
