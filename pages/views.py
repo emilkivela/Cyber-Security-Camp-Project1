@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Account, Transaction
 from django.http import HttpResponse
-
+import sqlite3
 
 @login_required
 def confirmView(request):
@@ -45,15 +45,29 @@ def transactionView(request):
 	return render(request, 'pages/transactions.html', {'transactions' : transactions})
 
 def signinView(request):
-    if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = User.objects.create_user(username=username, password=password)
-        account = Account(user=user, balance=100)
-        account.save()
-        return redirect('/')
-
-    return render(request, 'pages/signin.html')
+	if request.method == "POST":
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		# Vulnerability: Identification and Authentication Failures
+		# At the moment we accept all passwords. However, this is not safe.
+		# It could be fixed for example by demanding the password to be over 10 characters long
+		# and not be in a list of known passwords
+		# For example:
+		# known_pws = [p.strip() for p in open(passwords.text)]
+		# if len(password) > 10 and password not it known_pws:
+		user = User.objects.create_user(username=username, password=password)
+		account = Account(user=user, balance=100)
+		account.save()
+		# Vulnerability: Cryptographic failure
+		# We should not store passwords or other sensitive data in plaintext, it should be hashed.
+		# One example of how it could be done would be this:
+		# import bcrypt
+		# bcrypt.hashpw(password, bcrypt.gensalt())
+		db = sqlite3.connect("db.sqlite3")
+		db.execute("INSERT INTO Users (username, password), VALUES(?, ?)", [username, password])
+		return redirect('/')
+	
+	return render(request, 'pages/signin.html')
 
 def infoView(request, transaction_id):
 	# Broken Access Control
